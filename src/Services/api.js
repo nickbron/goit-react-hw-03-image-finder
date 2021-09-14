@@ -9,5 +9,5 @@ export const fetchPictures = async (name, page) => {
     `${BASE_URL}?key=${API_KEY}&q=${name}&${params}&page=${page}`,
   );
 
-  return response.data;
+  return response.data.hits;
 };

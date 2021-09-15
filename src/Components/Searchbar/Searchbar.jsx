@@ -1,3 +1,11 @@
+import {
+  Header,
+  Form,
+  SearchButton,
+  SearchButtonLabel,
+  Input,
+} from './Searchbar.styled';
+
 export const Searchbar = ({ onSearch }) => {
   const handleSearch = e => {
     e.preventDefault();
@@ -5,13 +13,13 @@ export const Searchbar = ({ onSearch }) => {
   };
 
   return (
-    <header className="Searchbar">
-      <form onSubmit={handleSearch} autoComplete="off" className="SearchForm">
-        <button type="submit" className="SearchForm-button">
-          <span className="SearchForm-button-label">Search</span>
-        </button>
+    <Header>
+      <Form onSubmit={handleSearch} autoComplete="off">
+        <SearchButton type="submit">
+          <SearchButtonLabel>Search</SearchButtonLabel>
+        </SearchButton>
 
-        <input
+        <Input
           name="pictureName"
           className="SearchForm-input"
           type="text"
@@ -19,7 +27,7 @@ export const Searchbar = ({ onSearch }) => {
           autoFocus
           placeholder="Search images and photos"
         />
-      </form>
-    </header>
+      </Form>
+    </Header>
   );
 };

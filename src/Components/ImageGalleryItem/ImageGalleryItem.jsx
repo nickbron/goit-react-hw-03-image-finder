@@ -5,7 +5,7 @@ export const ImageGalleryItem = ({ item }) => {
     <GalleryItem key={item.id}>
       <GalleryItemImage
         src={item.webformatURL}
-        alt={item.tags}
+        alt=""
         // onClick={() => toggleModal(item)}
       />
     </GalleryItem>

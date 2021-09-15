@@ -1,3 +1,4 @@
+import Loader from 'react-loader-spinner';
 import { Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { fetchPictures } from 'Services/api';
@@ -9,7 +10,13 @@ export default class App extends Component {
     pictureName: null,
     pictures: [],
     page: 1,
-    //  data: [],
+  };
+
+  scroll = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   };
 
   handleBarSubmit = pictureName => {
@@ -20,39 +27,48 @@ export default class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
-  onClickLoadMoreBtn = () => {
-    // pixabayApi.incrementPage();
-    // const imageInfo =  this.searchPicture();
-    // this.setState(prevState => ({
-    //   imageGalleryItems: [...prevState.imageGalleryItems, ...imageInfo],
-    // }));
-    // return true;
+  fetchData = async () => {
+    const data = await fetchPictures(this.state.pictureName, this.state.page);
+    const imageInfo = data.map(({ id, largeImageURL, webformatURL }) => ({
+      id,
+      largeImageURL,
+      webformatURL,
+    }));
+    return imageInfo;
   };
 
-  async componentDidUpdate(prevProps, prevState) {
-    console.log('did', prevState.page);
-    console.log('did', this.state.page);
+  componentDidUpdate(prevProps, prevState) {
+    const imageInfo = this.fetchData();
+    this.scroll();
     if (prevState.pictureName !== this.state.pictureName) {
-      const data = await fetchPictures(this.state.pictureName, this.state.page);
-      const imageInfo = data.map(({ id, largeImageURL, webformatURL }) => ({
-        id,
-        largeImageURL,
-        webformatURL,
-      }));
-      this.setState({ pictures: imageInfo });
-      console.log('gfgfgfgf', this.state.pictures);
+      imageInfo.then(res => {
+        this.setState({ pictures: res });
+      });
+    }
+
+    if (prevState.page !== this.state.page) {
+      imageInfo.then(res => {
+        this.setState({ pictures: [...prevState.pictures, ...res] });
+      });
     }
   }
 
   render() {
-    const { pictures, page } = this.state;
+    const { pictures } = this.state;
 
     return (
-      <div>
+      <div className="App">
         <Searchbar onSearch={this.handleBarSubmit} />
         {pictures.length > 0 && (
           <>
-            <ImageGallery pic={pictures} />;
+            <Loader
+              type="Puff"
+              color="#00BFFF"
+              height={100}
+              width={100}
+              timeout={3000} //3 secs
+            />
+            <ImageGallery pic={pictures} toggleModal={this.toggleModal} />;
             <LoadMoreBtn onClick={this.showMore} />
           </>
         )}

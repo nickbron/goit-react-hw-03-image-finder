@@ -1,12 +1,12 @@
 import { GalleryItem, GalleryItemImage } from './ImageGalleryItem.styled';
 
-export const ImageGalleryItem = ({ item }) => {
+export const ImageGalleryItem = ({ item, imageLarge, onSelect }) => {
   return (
     <GalleryItem key={item.id}>
       <GalleryItemImage
         src={item.webformatURL}
         alt=""
-        // onClick={() => toggleModal(item)}
+        onClick={() => onSelect(imageLarge)}
       />
     </GalleryItem>
   );
